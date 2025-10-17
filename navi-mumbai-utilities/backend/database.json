@@ -1,0 +1,87 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "phone": "9876543210",
+      "name": "Admin User",
+      "area": "Vashi",
+      "role": "admin",
+      "createdAt": "2025-10-16T13:05:54.243Z"
+    },
+    {
+      "id": 2,
+      "phone": "9876543211",
+      "name": "sufyan",
+      "area": "nerul",
+      "role": "user",
+      "createdAt": "2025-10-16T14:16:39.058Z"
+    }
+  ],
+  "complaints": [],
+  "announcements": [
+    {
+      "id": 1,
+      "title": "Welcome to Navi Mumbai Utilities",
+      "message": "Report power and water issues in real-time",
+      "type": "info",
+      "createdAt": "2025-10-16T13:05:54.265Z",
+      "active": true
+    },
+    {
+      "id": 2,
+      "title": "hello",
+      "message": "water supply cut from 1pm to 3pm",
+      "type": "alert",
+      "createdAt": "2025-10-16T14:30:43.154Z",
+      "active": true
+    },
+    {
+      "id": 3,
+      "title": "mohammed shailkh",
+      "message": "no water supply at 10pm at nerul west\n",
+      "type": "alert",
+      "createdAt": "2025-10-16T16:44:23.817Z",
+      "active": true
+    }
+  ],
+  "technicians": [
+    {
+      "id": 1,
+      "name": "Raj Sharma",
+      "phone": "9876543211",
+      "specialization": "power",
+      "status": "available",
+      "location": {
+        "lat": 19.076,
+        "lng": 72.8777
+      }
+    }
+  ],
+  "areas": [
+    {
+      "name": "Vashi",
+      "powerStatus": "normal",
+      "waterStatus": "normal"
+    },
+    {
+      "name": "Nerul",
+      "powerStatus": "normal",
+      "waterStatus": "normal"
+    },
+    {
+      "name": "Kharghar",
+      "powerStatus": "normal",
+      "waterStatus": "normal"
+    },
+    {
+      "name": "Sanpada",
+      "powerStatus": "normal",
+      "waterStatus": "normal"
+    },
+    {
+      "name": "Seawoods",
+      "powerStatus": "normal",
+      "waterStatus": "normal"
+    }
+  ]
+}

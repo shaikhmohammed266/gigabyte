@@ -1,0 +1,100 @@
+/* Dashboard Styles */
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+.status-badge {
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.bg-critical { background-color: #dc3545; }
+.bg-high { background-color: #fd7e14; }
+.bg-medium { background-color: #ffc107; color: #000; }
+.bg-low { background-color: #198754; }
+
+/* Complaint Table */
+.complaint-item {
+    border-left: 4px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.complaint-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.complaint-item.critical { border-left-color: #dc3545; }
+.complaint-item.high { border-left-color: #fd7e14; }
+.complaint-item.medium { border-left-color: #ffc107; }
+.complaint-item.low { border-left-color: #198754; }
+
+/* Quick Action Buttons */
+.btn-quick-action {
+    padding: 1.5rem;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-quick-action:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Map Container */
+#liveMap {
+    border-radius: 10px;
+    overflow: hidden;
+}
+.live-map-container {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    height: 400px;
+    background: #f8f9fa;
+    position: relative;
+}
+
+#liveMap {
+    height: 100% !important;
+    width: 100% !important;
+    min-height: 400px;
+}
+
+/* Map marker animations */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.user-location-marker, .complaint-marker {
+    animation: pulse 2s infinite;
+}
+
+/* Ensure map container is properly sized */
+.leaflet-container {
+    background: #e8ecef !important;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+.leaflet-popup-content {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+    margin: 15px 19px !important;
+}

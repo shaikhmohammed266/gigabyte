@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Navi Mumbai Utilities</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+        .form-check-card {
+    border: 2px solid #dee2e6;
+    border-radius: 15px;
+    padding: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.form-check-card:hover {
+    border-color: #4285f4;
+    transform: translateY(-2px);
+}
+
+.form-check-card .form-check-input {
+    display: none;
+}
+
+.form-check-card .form-check-input:checked + .form-check-label {
+    background: rgba(66, 133, 244, 0.1);
+    border-radius: 13px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+        :root {
+            --primary: #2c5aa0;
+            --secondary: #34a853;
+            --danger: #ea4335;
+            --warning: #fbbc05;
+            --info: #4285f4;
+            --dark: #2d3748;
+            --light: #f7fafc;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            min-height: 100vh;
+            border-radius: 0;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: none;
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--info));
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .quick-action-btn {
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            border: none;
+            border-radius: 20px;
+            padding: 30px 20px;
+            color: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quick-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+        }
+        
+        .quick-action-btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+        }
+        
+        .quick-action-btn.danger {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        }
+        
+        .quick-action-btn.danger:hover {
+            box-shadow: 0 20px 40px rgba(255, 107, 107, 0.4);
+        }
+        
+        .complaint-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        
+        .complaint-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .complaint-card.critical { border-left-color: var(--danger); }
+        .complaint-card.high { border-left-color: var(--warning); }
+        .complaint-card.medium { border-left-color: var(--info); }
+        .complaint-card.low { border-left-color: var(--secondary); }
+        
+        .live-map-container {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            height: 400px;
+            background: #f8f9fa;
+        }
+        
+        .area-status-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .area-status-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+        
+        .announcement-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        
+        .announcement-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .badge-pill {
+            border-radius: 15px;
+            padding: 8px 16px;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--info));
+            border-radius: 3px;
+        }
+        
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .feature-icon.primary { background: rgba(44, 90, 160, 0.1); color: var(--primary); }
+        .feature-icon.success { background: rgba(52, 168, 83, 0.1); color: var(--secondary); }
+        .feature-icon.warning { background: rgba(251, 188, 5, 0.1); color: var(--warning); }
+        .feature-icon.danger { background: rgba(234, 67, 53, 0.1); color: var(--danger); }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(44, 90, 160, 0.95); backdrop-filter: blur(20px);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">
+                <i class="fas fa-bolt me-2"></i>NaviMumbai Utilities
+            </a>
+            
+            <div class="navbar-nav ms-auto align-items-center">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <div class="user-avatar me-3">
+                            <span id="userInitials">U</span>
+                        </div>
+                        <div>
+                            <div id="userName" class="fw-semibold text-white">User</div>
+                            <small class="text-light opacity-75" id="userArea">Area</small>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-container">
+        <div class="container-fluid py-4">
+            <div class="row g-4">
+                <!-- Left Sidebar -->
+                <div class="col-lg-3">
+                    <!-- Quick Actions -->
+                    <div class="mb-4">
+                        <h5 class="section-title">Quick Actions</h5>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="quick-action-btn danger" onclick="showReportModal('power')">
+                                    <i class="fas fa-bolt fa-3x mb-3"></i>
+                                    <h6 class="mb-2">Report Power Issue</h6>
+                                    <small>Outage, Voltage, Meter problems</small>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="quick-action-btn" onclick="showReportModal('water')">
+                                    <i class="fas fa-tint fa-3x mb-3"></i>
+                                    <h6 class="mb-2">Report Water Issue</h6>
+                                    <small>Supply, Pressure, Quality issues</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Status -->
+                    <div class="area-status-card">
+                        <h6 class="mb-3"><i class="fas fa-map-marker-alt me-2"></i>Area Status</h6>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="text-center p-3 rounded" style="background: rgba(255,255,255,0.2);">
+                                    <i class="fas fa-bolt fa-lg mb-2"></i>
+                                    <div class="fw-bold fs-5" id="areaPowerStatus">Normal</div>
+                                    <small>Power Supply</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="text-center p-3 rounded" style="background: rgba(255,255,255,0.2);">
+                                    <i class="fas fa-tint fa-lg mb-2"></i>
+                                    <div class="fw-bold fs-5" id="areaWaterStatus">Normal</div>
+                                    <small>Water Supply</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-success alert-dismissible fade show py-2 mb-0" style="background: rgba(255,255,255,0.2); border: none; color: white;">
+                            <small><i class="fas fa-check-circle me-1"></i> All services operational</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-6">
+                    <!-- Statistics -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="stat-card text-center">
+                                <div class="feature-icon primary mx-auto">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <h3 class="fw-bold" id="activeComplaints">0</h3>
+                                <small class="text-muted">Active Issues</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card text-center">
+                                <div class="feature-icon success mx-auto">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <h3 class="fw-bold" id="resolvedComplaints">0</h3>
+                                <small class="text-muted">Resolved</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card text-center">
+                                <div class="feature-icon warning mx-auto">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <h3 class="fw-bold" id="avgResponseTime">-</h3>
+                                <small class="text-muted">Avg Response</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card text-center">
+                                <div class="feature-icon danger mx-auto">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h3 class="fw-bold" id="resolutionRate">-</h3>
+                                <small class="text-muted">Success Rate</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Map -->
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="section-title mb-0">
+                                <span class="live-indicator"></span>
+                                Live Issues Map - Navi Mumbai
+                            </h5>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary active" onclick="filterMap('all')">All</button>
+                                <button class="btn btn-outline-primary" onclick="filterMap('power')">Power</button>
+                                <button class="btn btn-outline-primary" onclick="filterMap('water')">Water</button>
+                            </div>
+                        </div>
+                        <div class="live-map-container">
+                            <div id="liveMap" style="height: 100%; width: 100%;"></div>
+                        </div>
+                        <div class="mt-2 text-center">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Showing issues in your area and nearby locations
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- My Complaints -->
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="section-title mb-0">My Complaints</h5>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary me-2" onclick="loadMyComplaints()">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button class="btn btn-sm btn-primary" onclick="showReportModal('power')">
+                                    <i class="fas fa-plus me-1"></i>New Report
+                                </button>
+                            </div>
+                        </div>
+                        <div id="complaintsList">
+                            <div class="text-center py-5 text-muted">
+                                <i class="fas fa-inbox fa-3x mb-3 opacity-50"></i>
+                                <p class="mb-3">No complaints yet</p>
+                                <button class="btn btn-primary" onclick="showReportModal('power')">
+                                    Report Your First Issue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-lg-3">
+                    <!-- Announcements -->
+                    <div class="mb-4">
+                        <h5 class="section-title">
+                            <i class="fas fa-bullhorn me-2 text-warning"></i>
+                            Announcements
+                        </h5>
+                        <div id="announcementsList">
+                            <div class="announcement-card text-center text-muted">
+                                <i class="fas fa-info-circle fa-2x mb-3 opacity-50"></i>
+                                <p class="mb-0">No announcements</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div>
+                        <h5 class="section-title">
+                            <i class="fas fa-history me-2 text-info"></i>
+                            Recent Activity
+                        </h5>
+                        <div class="activity-timeline">
+                            <div class="activity-item d-flex mb-3">
+                                <div class="activity-icon me-3 text-success">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                                <div class="activity-content flex-grow-1">
+                                    <small class="d-block fw-semibold">Power restored</small>
+                                    <small class="text-muted">Kharghar • 5 min ago</small>
+                                </div>
+                            </div>
+                            <div class="activity-item d-flex mb-3">
+                                <div class="activity-icon me-3 text-primary">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="activity-content flex-grow-1">
+                                    <small class="d-block fw-semibold">Water issue reported</small>
+                                    <small class="text-muted">Sanpada • 12 min ago</small>
+                                </div>
+                            </div>
+                            <div class="activity-item d-flex">
+                                <div class="activity-icon me-3 text-warning">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div class="activity-content flex-grow-1">
+                                    <small class="d-block fw-semibold">Maintenance scheduled</small>
+                                    <small class="text-muted">Seawoods • 1 hour ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Report Modal -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="reportModalTitle">
+                        <i class="fas fa-edit me-2"></i>Report Utility Issue
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <input type="hidden" id="issueType">
+                        
+                        <!-- Issue Type Section -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Issue Type</label>
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <div class="form-check-card" id="powerOption">
+                                            <input class="form-check-input" type="radio" name="issueTypeRadio" id="powerRadio" value="power">
+                                            <label class="form-check-label w-100" for="powerRadio">
+                                                <div class="text-center p-3">
+                                                    <i class="fas fa-bolt fa-2x text-warning mb-2"></i>
+                                                    <div class="fw-semibold">Power Issue</div>
+                                                    <small class="text-muted">Outage, Voltage, Meter</small>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-check-card" id="waterOption">
+                                            <input class="form-check-input" type="radio" name="issueTypeRadio" id="waterRadio" value="water">
+                                            <label class="form-check-label w-100" for="waterRadio">
+                                                <div class="text-center p-3">
+                                                    <i class="fas fa-tint fa-2x text-info mb-2"></i>
+                                                    <div class="fw-semibold">Water Issue</div>
+                                                    <small class="text-muted">Supply, Pressure, Quality</small>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Problem Details -->
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-tasks me-1 text-primary"></i>Problem Category
+                                </label>
+                                <select class="form-select" id="problemSelect" required>
+                                    <option value="">Select problem type...</option>
+                                    <!-- Options will be populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-exclamation-triangle me-1 text-warning"></i>Urgency Level
+                                </label>
+                                <select class="form-select" id="urgencyLevel">
+                                    <option value="low">🟢 Low - Minor inconvenience</option>
+                                    <option value="medium" selected>🟡 Medium - Needs attention</option>
+                                    <option value="high">🟠 High - Affecting daily life</option>
+                                    <option value="critical">🔴 Critical - Emergency situation</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-align-left me-1 text-info"></i>Detailed Description
+                                </label>
+                                <textarea class="form-control" id="description" rows="4" 
+                                          placeholder="Please describe the issue in detail. Include when it started, how it's affecting you, and any other relevant information..." 
+                                          required></textarea>
+                                <div class="form-text">The more details you provide, the faster we can help!</div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-map-marker-alt me-1 text-danger"></i>Exact Location
+                                </label>
+                                <input type="text" class="form-control" id="location" 
+                                       placeholder="e.g., Building name, floor, flat number" required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-landmark me-1 text-success"></i>Landmark (Optional)
+                                </label>
+                                <input type="text" class="form-control" id="landmark" 
+                                       placeholder="Nearby landmark for easy identification">
+                            </div>
+                            
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">
+                                    <i class="fas fa-camera me-1 text-primary"></i>Upload Photos (Optional)
+                                </label>
+                                <div class="border rounded p-3 text-center">
+                                    <input type="file" class="form-control" id="photoUpload" 
+                                           accept="image/*" multiple 
+                                           style="display: none;">
+                                    <div id="uploadArea" class="cursor-pointer">
+                                        <i class="fas fa-cloud-upload-alt fa-2x text-muted mb-2"></i>
+                                        <p class="mb-1">Click to upload photos</p>
+                                        <small class="text-muted">Supports JPG, PNG • Max 5 photos • 5MB each</small>
+                                    </div>
+                                    <div id="uploadPreview" class="mt-3 d-none">
+                                        <div class="row g-2" id="previewContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Emergency Contact -->
+                            <div class="col-12">
+                                <div class="alert alert-warning">
+                                    <div class="d-flex">
+                                        <i class="fas fa-phone-alt me-2 mt-1"></i>
+                                        <div>
+                                            <strong>Emergency Contact</strong>
+                                            <p class="mb-0 small">For critical power outages or water supply issues, call our 24/7 helpline: <strong>1800-123-4567</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="submitComplaint()" id="submitReportBtn">
+                        <i class="fas fa-paper-plane me-1"></i>Submit Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/user-dashboard.js"></script>
+</body>
+</html>

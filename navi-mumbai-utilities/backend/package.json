@@ -1,0 +1,23 @@
+{
+  "name": "navi-mumbai-utilities-backend",
+  "version": "1.0.0",
+  "description": "Robust backend for Navi Mumbai Utilities Solution",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.7.2"
+  },
+  "keywords": [
+    "utilities",
+    "navi-mumbai",
+    "backend"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
