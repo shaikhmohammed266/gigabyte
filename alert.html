@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Complaint</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-12 {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+
+        .max-w-4xl {
+            max-width: 64rem;
+        }
+
+        .space-y-8 > * + * {
+            margin-top: 2rem;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .space-y-2 > * + * {
+            margin-top: 0.5rem;
+        }
+
+        .text-4xl {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .text-muted {
+            color: #64748b;
+        }
+
+        .card {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .p-6 {
+            padding: 1.5rem;
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 1rem;
+        }
+
+        .label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+        }
+
+        .gradient-water {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+
+        .mr-2 {
+            margin-right: 0.5rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .space-y-6 > * + * {
+            margin-top: 1.5rem;
+        }
+
+        .items-start {
+            align-items: flex-start;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .gap-4 {
+            gap: 1rem;
+        }
+
+        .mb-6 {
+            margin-bottom: 1.5rem;
+        }
+
+        .p-4 {
+            padding: 1rem;
+        }
+
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+
+        .bg-primary-10 {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .text-primary {
+            color: #3b82f6;
+        }
+
+        .bg-secondary-10 {
+            background-color: rgba(167, 139, 250, 0.1);
+        }
+
+        .text-secondary {
+            color: #a78bfa;
+        }
+
+        .text-2xl {
+            font-size: 1.5rem;
+            line-height: 2rem;
+        }
+
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .rounded-full {
+            border-radius: 9999px;
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .bg-success-10 {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .text-success {
+            color: #10b981;
+        }
+
+        .bg-primary-10-status {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .text-primary-status {
+            color: #3b82f6;
+        }
+
+        .bg-muted {
+            background-color: #f1f5f9;
+        }
+
+        .text-muted-foreground {
+            color: #64748b;
+        }
+
+        .grid {
+            display: grid;
+        }
+
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+
+        .md-grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media (min-width: 768px) {
+            .md-grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        .bg-muted-50 {
+            background-color: rgba(241, 245, 249, 0.5);
+        }
+
+        .h-5 {
+            height: 1.25rem;
+        }
+
+        .w-5 {
+            width: 1.25rem;
+        }
+
+        .mt-0-5 {
+            margin-top: 0.125rem;
+        }
+
+        .text-xl {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+        }
+
+        .mb-6-timeline {
+            margin-bottom: 1.5rem;
+        }
+
+        .space-y-4-timeline > * + * {
+            margin-top: 1rem;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .w-10 {
+            width: 2.5rem;
+        }
+
+        .h-10 {
+            height: 2.5rem;
+        }
+
+        .bg-success {
+            background-color: #10b981;
+        }
+
+        .text-success-foreground {
+            color: white;
+        }
+
+        .w-0-5 {
+            width: 0.125rem;
+        }
+
+        .h-12 {
+            height: 3rem;
+        }
+
+        .pb-8 {
+            padding-bottom: 2rem;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .text-foreground {
+            color: #0f172a;
+        }
+
+        .navbar {
+            background-color: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem 0;
+        }
+
+        .navbar-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .main-container {
+            min-height: calc(100vh - 64px);
+            background-color: #f8fafc;
+        }
+
+        .icon {
+            font-size: 1.25rem;
+        }
+
+        .inline {
+            display: inline;
+        }
+
+        .mr-1 {
+            margin-right: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .flex.gap-2 {
+                flex-direction: column;
+            }
+
+            .grid-cols-1 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container mx-auto px-4">
+            <h2 class="navbar-title">Navi Mumbai Services</h2>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="container mx-auto px-4 py-12">
+            <div class="max-w-4xl mx-auto space-y-8">
+                <div class="text-center space-y-2">
+                    <h1 class="text-4xl font-bold">Track Your Complaint</h1>
+                    <p class="text-muted">
+                        Enter your tracking ID to view complaint status
+                    </p>
+                </div>
+
+                <!-- Search Box -->
+                <div class="card p-6">
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label for="trackingId" class="label">Tracking ID</label>
+                            <div class="flex gap-2">
+                                <input
+                                    id="trackingId"
+                                    type="text"
+                                    placeholder="e.g., WTR-2025-001 or ELC-2025-045"
+                                    value=""
+                                    class="input"
+                                    onkeydown="handleKeyDown(event)"
+                                />
+                                <button onclick="handleSearch()" class="btn gradient-water">
+                                    <span class="icon">🔍</span>
+                                    <span class="mr-2"></span>Search
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted">
+                            You received this ID via SMS/Email after reporting the issue
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Complaint Details -->
+                <div id="complaint-details" class="hidden space-y-6">
+                    <!-- Status Card -->
+                    <div class="card p-6">
+                        <div class="flex items-start justify-between gap-4 mb-6">
+                            <div class="flex items-start gap-4">
+                                <div id="type-icon" class="p-4 rounded-lg bg-primary-10">
+                                    <span class="icon text-primary">💧</span>
+                                </div>
+                                <div class="space-y-1">
+                                    <h2 id="complaint-id" class="text-2xl font-bold">WTR-2025-001</h2>
+                                    <p id="complaint-issue" class="text-muted">Water leakage at main pipeline</p>
+                                </div>
+                            </div>
+                            <span id="status-badge" class="px-4 py-2 rounded-full text-sm font-medium bg-primary-10-status text-primary-status">
+                                ⏰ In Progress
+                            </span>
+                        </div>
+
+                        <!-- Info Grid -->
+                        <div class="grid grid-cols-1 md-grid-cols-2 gap-4">
+                            <div class="flex items-start gap-3 p-4 rounded-lg bg-muted-50">
+                                <span class="icon text-muted-foreground mt-0-5">📍</span>
+                                <div>
+                                    <p class="text-sm text-muted-foreground">Location</p>
+                                    <p id="location" class="font-medium">Sector 15, Vashi</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 rounded-lg bg-muted-50">
+                                <span class="icon text-muted-foreground mt-0-5">📅</span>
+                                <div>
+                                    <p class="text-sm text-muted-foreground">Reported At</p>
+                                    <p id="reported-at" class="font-medium">2025-01-15 10:30 AM</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 rounded-lg bg-muted-50">
+                                <span class="icon text-muted-foreground mt-0-5">👤</span>
+                                <div>
+                                    <p class="text-sm text-muted-foreground">Assigned Team</p>
+                                    <p id="assigned-team" class="font-medium">Water Works Team A</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3 p-4 rounded-lg bg-muted-50">
+                                <span class="icon text-muted-foreground mt-0-5">⏰</span>
+                                <div>
+                                    <p class="text-sm text-muted-foreground">Est. Resolution</p>
+                                    <p id="est-resolution" class="font-medium">6 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold mb-6-timeline">Status Timeline</h3>
+                        <div id="timeline" class="space-y-4-timeline">
+                            <!-- Timeline items will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let trackingId = '';
+        let complaint = null;
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        }
+
+        function handleSearch() {
+            trackingId = document.getElementById('trackingId').value || 'WTR-2025-001';
+            // Mock data
+            complaint = {
+                id: trackingId,
+                type: 'water',
+                issue: 'Water leakage at main pipeline',
+                status: 'in-progress',
+                location: 'Sector 15, Vashi',
+                reportedAt: '2025-01-15 10:30 AM',
+                reportedBy: 'Rahul Sharma',
+                contact: '+91 98765 43210',
+                timeline: [
+                    { status: 'Reported', time: '2025-01-15 10:30 AM', completed: true },
+                    { status: 'Acknowledged', time: '2025-01-15 10:45 AM', completed: true },
+                    { status: 'Team Assigned', time: '2025-01-15 11:15 AM', completed: true },
+                    { status: 'In Progress', time: '2025-01-15 12:00 PM', completed: true },
+                    { status: 'Resolved', time: 'Expected: Today 6:00 PM', completed: false },
+                ],
+                assignedTeam: 'Water Works Team A',
+                estimatedResolution: '6 hours',
+            };
+
+            // Update UI
+            document.getElementById('complaint-id').textContent = complaint.id;
+            document.getElementById('complaint-issue').textContent = complaint.issue;
+            document.getElementById('location').textContent = complaint.location;
+            document.getElementById('reported-at').textContent = complaint.reportedAt;
+            document.getElementById('assigned-team').textContent = complaint.assignedTeam;
+            document.getElementById('est-resolution').textContent = complaint.estimatedResolution;
+
+            // Update type icon
+            const typeIcon = document.getElementById('type-icon');
+            const iconSpan = typeIcon.querySelector('.icon');
+            if (complaint.type === 'water') {
+                typeIcon.className = 'p-4 rounded-lg bg-primary-10';
+                iconSpan.className = 'icon text-primary';
+                iconSpan.textContent = '💧';
+            } else {
+                typeIcon.className = 'p-4 rounded-lg bg-secondary-10';
+                iconSpan.className = 'icon text-secondary';
+                iconSpan.textContent = '⚡';
+            }
+
+            // Update status badge
+            const statusBadge = document.getElementById('status-badge');
+            let badgeContent = '';
+            let badgeClass = '';
+            if (complaint.status === 'resolved') {
+                badgeClass = 'bg-success-10 text-success';
+                badgeContent = '✅ Resolved';
+            } else if (complaint.status === 'in-progress') {
+                badgeClass = 'bg-primary-10-status text-primary-status';
+                badgeContent = '⏰ In Progress';
+            } else {
+                badgeClass = 'bg-muted text-muted-foreground';
+                badgeContent = '⚠️ Pending';
+            }
+            statusBadge.className = `px-4 py-2 rounded-full text-sm font-medium ${badgeClass}`;
+            statusBadge.textContent = badgeContent;
+
+            // Update timeline
+            const timelineDiv = document.getElementById('timeline');
+            timelineDiv.innerHTML = '';
+            complaint.timeline.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'flex gap-4';
+                itemDiv.innerHTML = `
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center ${item.completed ? 'bg-success text-success-foreground' : 'bg-muted text-muted-foreground'}">
+                            ${item.completed ? '<span class="icon">✅</span>' : '<span class="icon">⏰</span>'}
+                        </div>
+                        ${index < complaint.timeline.length - 1 ? `<div class="w-0-5 h-12 ${item.completed ? 'bg-success' : 'bg-muted'}"></div>` : ''}
+                    </div>
+                    <div class="flex-1 pb-8">
+                        <p class="font-semibold ${item.completed ? 'text-foreground' : 'text-muted-foreground'}">${item.status}</p>
+                        <p class="text-sm text-muted-foreground">${item.time}</p>
+                    </div>
+                `;
+                timelineDiv.appendChild(itemDiv);
+            });
+
+            // Show details
+            document.getElementById('complaint-details').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
